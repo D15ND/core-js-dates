@@ -32,10 +32,11 @@ function dateToTimestamp(date) {
  * Date(2023, 5, 1, 8, 20, 55) => '08:20:55'
  * Date(2015, 10, 20, 23, 15, 1) => '23:15:01'
  */
-function getTime(/* date */) {
-  // const res = new Date();
-  // return res.setHours(date);
-  throw new Error('Not implemented');
+function getTime(date) {
+  const hours = String(date.getHours()).padStart(2, '0');
+  const mins = String(date.getMinutes()).padStart(2, '0');
+  const secs = String(date.getSeconds()).padStart(2, '0');
+  return `${hours}:${mins}:${secs}`;
 }
 
 /**
@@ -103,8 +104,8 @@ function getNextFriday(/* date */) {
  * 1, 2024 => 31
  * 2, 2024 => 29
  */
-function getCountDaysInMonth(/* month, year */) {
-  throw new Error('Not implemented');
+function getCountDaysInMonth(month, year) {
+  return new Date(year, month, 0).getDate();
 }
 
 /**
@@ -154,8 +155,26 @@ function isDateInPeriod(/* date, period */) {
  * '1999-01-05T02:20:00.000Z' => '1/5/1999, 2:20:00 AM'
  * '2010-12-15T22:59:00.000Z' => '12/15/2010, 10:59:00 PM'
  */
-function formatDate(/* date */) {
-  throw new Error('Not implemented');
+function formatDate(date) {
+  const d = new Date(date);
+  const year = d.getUTCFullYear();
+  const month = d.getUTCMonth() + 1;
+  const day = d.getUTCDate();
+  const hours = d.getUTCHours();
+  const mins = d.getUTCMinutes().toString().padStart(2, '0');
+  const secs = d.getUTCSeconds().toString().padStart(2, '0');
+  let newHours;
+  if (hours === 0) {
+    newHours = 12;
+  } else if (hours > 12) {
+    newHours = hours - 12;
+  } else {
+    newHours = hours;
+  }
+  const getCal = `${month}/${day}/${year}`;
+  const time = `${newHours}:${mins}:${secs}`;
+  const meridium = hours >= 12 ? 'PM' : 'AM';
+  return `${getCal}, ${time} ${meridium}`;
 }
 
 /**
